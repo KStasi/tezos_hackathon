@@ -49,7 +49,7 @@ type action is
 function buy(const action : actionBuy ; const s : storageType) : (list(operation) * storageType) is
   block { 
     const availableSupply: tez = s.totalSupply - s.currentSupply;
-    if amount  >= availableSupply then fail("Total supply overruned");
+    if amount  > availableSupply then fail("Total supply overruned");
     else skip;
     const balancesMap : balances = s.balances;
     const tokensAmount: tez = amount * s.rate;
@@ -77,7 +77,7 @@ function transferFrom(const action : actionTransferFrom ; const s : storageType)
     end;
 
     const awailableAmount: tez = balanceFromInfo.balance;
-    if action.amount < awailableAmount then fail("The amount isn't awailable")
+    if action.amount > awailableAmount then fail("The amount isn't awailable")
     else skip;
 
     const allowedAmont: tez = case balanceFromInfo.allowed[sender] of
@@ -85,7 +85,7 @@ function transferFrom(const action : actionTransferFrom ; const s : storageType)
     | Some(b) -> get_force(sender, balanceFromInfo.allowed)
     end;
 
-    if action.amount < allowedAmont then fail("The amount isn't awailable")
+    if action.amount > allowedAmont then fail("The amount isn't awailable")
     else skip;
 
 

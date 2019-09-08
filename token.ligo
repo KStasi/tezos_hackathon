@@ -91,22 +91,22 @@ function transferFrom(const action : actionTransferFrom ; const s : storageType)
     | Some(b) -> get_force(sender, balanceFromInfo.allowed)
     end;
 
-    // if action.amount > allowedAmont then fail("The amount isn't awailable")
-    // else skip;
+    if action.amount > allowedAmont then fail("The amount isn't awailable")
+    else skip;
 
 
     const balanceToInfo : balance = case balancesMap[action.addrTo] of
     | None -> record balance = 0mtz; allowed = ((map end) : map(address, tez)); end
     | Some(b) -> get_force(action.addrTo, s.balances)
     end;
-    // const allowed: map(address, tez) = balanceFromInfo.allowed;
-    // allowed[sender] :=  allowedAmont - action.amount;
-    // allowed[action.addrFrom] :=  awailableAmount - action.amount;
+    const allowed: map(address, tez) = balanceFromInfo.allowed;
+    allowed[sender] :=  allowedAmont - action.amount;
+    allowed[action.addrFrom] :=  awailableAmount - action.amount;
 
-    // balancesMap[action.addrFrom] := record 
-    //     balance = awailableAmount - action.amount;
-    //     allowed = allowed;
-    // end;
+    balancesMap[action.addrFrom] := record 
+        balance = awailableAmount - action.amount;
+        allowed = allowed;
+    end;
     balancesMap[action.addrFrom] := record 
         balance = awailableAmount - action.amount;
         allowed = balanceFromInfo.allowed;
@@ -139,21 +139,21 @@ function convertToTez(const action : actionConvertToTez ; const s : storageType)
 function approve(const action : actionTransfer ; const s : storageType) : (list(operation) * storageType) is
   block { skip
 
-    // const balancesMap : balances = s.balances;
-    // const balanceFromInfo : balance = case balancesMap[sender] of
-    // | None -> record balance = 0mtz; allowed = ((map end) : map(address, tez)); end
-    // | Some(b) -> get_force(sender, balancesMap)
-    // end;
-    // const amount: tez = balanceFromInfo.balance;
-    // if action.amount < amount then fail("The amount isn't awailable")
-    // else skip;
-    // const allowed:  map(address, tez) = balanceFromInfo.allowed;
-    // allowed[action.addrTo] := action.amount;
-    // balancesMap[sender] := record 
-    //     balance = balanceFromInfo.balance;
-    //     allowed = allowed;
-    // end;
-    // s.balances := balancesMap;
+    const balancesMap : balances = s.balances;
+    const balanceFromInfo : balance = case balancesMap[sender] of
+    | None -> record balance = 0mtz; allowed = ((map end) : map(address, tez)); end
+    | Some(b) -> get_force(sender, balancesMap)
+    end;
+    const amount: tez = balanceFromInfo.balance;
+    if action.amount < amount then fail("The amount isn't awailable")
+    else skip;
+    const allowed:  map(address, tez) = balanceFromInfo.allowed;
+    allowed[action.addrTo] := action.amount;
+    balancesMap[sender] := record 
+        balance = balanceFromInfo.balance;
+        allowed = allowed;
+    end;
+    s.balances := balancesMap;
    } with ((nil: list(operation)) , s)
 
 

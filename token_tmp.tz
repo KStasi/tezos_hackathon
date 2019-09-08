@@ -18,10 +18,10 @@
                             { { { { { { { { { DUP } ; CAR } } ; CAR } } ; CDR } ;
                                   { { { { { DIP { DUP } ; SWAP } } ; CDR } } ; CDR } } ;
                                 SUB } ;
-                              { { { { DUP ; { {} ; AMOUNT } } ; { COMPARE ; GE } } ;
+                              { { { { DUP ; { {} ; AMOUNT } } ; { COMPARE ; GT } } ;
                                   IF { { { PUSH string "Total supply overruned" ;
                                            { { { DIP { DUP } ; SWAP } ; { {} ; AMOUNT } } ;
-                                             { COMPARE ; GE } } } ;
+                                             { COMPARE ; GT } } } ;
                                          IF { { FAILWITH } } { { DROP ; PUSH unit Unit } } } }
                                      { PUSH unit Unit } } ;
                                 { { { { { { { { DIP { { DIP { DUP } ; SWAP } } ; SWAP } } ; CAR } } ;
@@ -192,7 +192,7 @@
                                                           SWAP } } ;
                                                   SWAP } } ;
                                               CDR } } ;
-                                          { COMPARE ; LT } } ;
+                                          { COMPARE ; GT } } ;
                                         IF { { { PUSH string "The amount isn't awailable" ;
                                                  { { { DIP { DUP } ; SWAP } ;
                                                      { { { DIP { { DIP { { DIP { { DIP { { DIP { { DIP { DUP } ; SWAP } } ; SWAP } } ; SWAP } } ;
@@ -200,7 +200,7 @@
                                                                    SWAP } } ;
                                                            SWAP } } ;
                                                        CDR } } ;
-                                                   { COMPARE ; LT } } } ;
+                                                   { COMPARE ; GT } } } ;
                                                IF { { FAILWITH } } { { DROP ; PUSH unit Unit } } } }
                                            { PUSH unit Unit } } ;
                                       { { { { { { { DIP { { DIP { DUP } ; SWAP } } ; SWAP } } ; CAR } ;
@@ -221,7 +221,7 @@
                                                               SWAP } } ;
                                                       SWAP } } ;
                                                   CDR } } ;
-                                              { COMPARE ; LT } } ;
+                                              { COMPARE ; GT } } ;
                                             IF { { { PUSH string "The amount isn't awailable" ;
                                                      { { { DIP { DUP } ; SWAP } ;
                                                          { { { DIP { { DIP { { DIP { { DIP { { DIP { { DIP { { DIP { { DIP { DUP } ; SWAP } } ; SWAP } } ; SWAP } } ;
@@ -231,7 +231,7 @@
                                                                        SWAP } } ;
                                                                SWAP } } ;
                                                            CDR } } ;
-                                                       { COMPARE ; LT } } } ;
+                                                       { COMPARE ; GT } } } ;
                                                    IF { { FAILWITH } } { { DROP ; PUSH unit Unit } } } }
                                                { PUSH unit Unit } } ;
                                           { { { { { DIP { { DIP { { DIP { { DIP { { DIP { DUP } ; SWAP } } ; SWAP } } ; SWAP } } ;

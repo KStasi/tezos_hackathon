@@ -19,14 +19,14 @@ type action is
 
 function buyTez(const action : actionBuy ; const s : storageType) : (list(operation) * storageType) is
   block { 
-   const availableTez: tez = s.totalTezos * 1mtz;
-   if sender  =/= s.token then fail("Permition denaed");
+    if sender  =/= s.token then fail("Permition denaed");
     else skip;
-    if amount  >= availableTez then fail("Not enough tez");
-    else skip;
+    const availableTez: nat = s.totalTezos;
     const tezAmount: nat = action.amount * s.totalTokens / ( s.totalTezos + action.amount);
     const totalTezos : int = s.totalTezos - tezAmount;
     const totalTokens : nat = s.totalTezos + tezAmount;
+    if tezAmount  >= availableTez then fail("Not enough tez");
+    else skip;
     s.totalTezos := abs(totalTezos);
     s.totalTokens := totalTokens;
     const contract : contract(unit) = get_contract(source);
@@ -36,15 +36,16 @@ function buyTez(const action : actionBuy ; const s : storageType) : (list(operat
 
 function buyToken(const action : actionBuy ; const s : storageType) : (list(operation) * storageType) is
   block { 
-   const availableTokens: tez = s.totalTokens * 1mtz;
-    if amount  >= availableTokens then fail("Not enough tez");
+    if amount  =/= action.amount*1mtz then fail("Not enough tez");
     else skip;
-    if amount  >= action.amount*1mtz then fail("Not enough tez");
-    else skip;
+    const availableTokens: nat = s.totalTokens;
     const tokenAmount: nat = action.amount * s.totalTezos / ( s.totalTokens + action.amount);
-    const params: actionTransfer = record addrTo=sender; amount=tokenAmount*1mtz; end;
     const totalTezos : nat = s.totalTezos + tokenAmount;
     const totalTokens : int = s.totalTezos - tokenAmount;
+    if tokenAmount  >= availableTokens then fail("Not enough tez");
+    else skip;
+    const params: actionTransfer = record addrTo=sender; amount=tokenAmount*1mtz; end;
+
     s.totalTezos := totalTezos;
     s.totalTokens := abs(totalTokens);
     const contract : contract(actionTransfer) = get_contract(s.token);

@@ -28,7 +28,7 @@
 			},
 			"alphanet": {
 				"dockerImage": "stovelabs/granary-tezos-client-alphanet",
-				"nodeAddr": "alphanet-node.tzscan.io",
+				"nodeAddr": "alphanet.tezrpc.me",
 				"nodeRpcPort": "80",
 				"baseDir": "<data.networks.alphanet.clientFolder>"
 			}

@@ -35,9 +35,14 @@ type actionBuy is record [
     amount : tez;
 ]
 
+
 type actionBuyTez is record [
     amount : nat;
 ]
+
+type actionDex is
+| BuyTez of actionBuyTez
+| BuyToken of actionBuyTez
 
 type action is
 | TransferFrom of actionTransferFrom
@@ -46,9 +51,6 @@ type action is
 | Buy of actionBuy
 | ConvertToTez of actionConvertToTez
 
-type actionDex is
-| BuyTez of actionBuyTez
-| BuyToken of actionBuyTez
 
 function buy(const action : actionBuy ; const s : storageType) : (list(operation) * storageType) is
   block { 

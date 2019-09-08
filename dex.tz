@@ -37,10 +37,9 @@
                                           CDR } } ;
                                       SUB } ;
                                     { { { { DIP { DUP } ; SWAP } ;
-                                          { { { { { DIP { { DIP { { DIP { { DIP { { DIP { DUP } ; SWAP } } ; SWAP } } ; SWAP } } ;
-                                                            SWAP } } ;
-                                                    SWAP } } ;
-                                                CAR } } ;
+                                          { { { DIP { { DIP { { DIP { { DIP { { DIP { DUP } ; SWAP } } ; SWAP } } ; SWAP } } ;
+                                                        SWAP } } ;
+                                                SWAP } } ;
                                             CDR } } ;
                                         ADD } ;
                                       { { { { { DIP { { DIP { { DIP { DUP } ; SWAP } } ; SWAP } } ; SWAP } ;
@@ -188,10 +187,9 @@
                                             CDR } } ;
                                         ADD } ;
                                       { { { { DIP { DUP } ; SWAP } ;
-                                            { { { { { DIP { { DIP { { DIP { { DIP { { DIP { DUP } ; SWAP } } ; SWAP } } ; SWAP } } ;
-                                                              SWAP } } ;
-                                                      SWAP } } ;
-                                                  CAR } } ;
+                                            { { { DIP { { DIP { { DIP { { DIP { { DIP { DUP } ; SWAP } } ; SWAP } } ; SWAP } } ;
+                                                          SWAP } } ;
+                                                  SWAP } } ;
                                               CDR } } ;
                                           SUB } ;
                                         { { { { { DIP { { DIP { { DIP { DUP } ; SWAP } } ; SWAP } } ; SWAP } ;

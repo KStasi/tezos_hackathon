@@ -578,10 +578,11 @@
                                                   { {} ; SENDER } } ;
                                                 PAIR } } ;
                                             PAIR } ;
-                                          { { { { DIP { { DIP { DUP } ; SWAP } } ; SWAP } } ; CAR } ;
+                                          { { { { { { DIP { { DIP { DUP } ; SWAP } } ; SWAP } } ; CAR } } ;
+                                              LEFT nat } ;
                                             { { { { { { DIP { { DIP { { DIP { DUP } ; SWAP } } ; SWAP } } ; SWAP } } ;
                                                     CDR } } ;
-                                                { CONTRACT nat ;
+                                                { CONTRACT (or nat nat) ;
                                                   IF_NONE
                                                     { { PUSH string "bad address for get_contract" ; FAILWITH } }
                                                     { {} } } } ;

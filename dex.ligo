@@ -89,7 +89,7 @@ function buyToken(const action : actionBuyTez ; const s : storageTypeDex) : (lis
     const contract : contract(action) = get_contract(s.token);
     const payment : operation = transaction(params, 0mtz, contract);
     const operations : list(operation) = list payment end;
-  } with ((nil: list(operation)) , s)
+  } with (operations , s)
 
 function main(const action : actionDex; const s : storageTypeDex) : (list(operation) * storageTypeDex) is 
  block {skip} with 

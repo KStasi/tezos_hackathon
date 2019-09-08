@@ -125,22 +125,23 @@ function convertToEth(const action : actionConvertToTez ; const s : storageType)
 
 
 function approve(const action : actionTransfer ; const s : storageType) : (list(operation) * storageType) is
-  block { skip
-    // const balancesMap : balances = s.balances;
-    // const balanceFromInfo : balance = case balancesMap[sender] of
-    // | None -> record balance = 0mtz; allowed = ((map end) : map(address, tez)); end
-    // | Some(b) -> get_force(sender, balancesMap)
-    // end;
-    // const amount: tez = balanceFromInfo.balance;
-    // if action.amount < amount then fail("The amount isn't awailable")
-    // else skip;
-    // const allowed:  map(address, tez) = balanceFromInfo.allowed;
-    // allowed[action.addrTo] := action.amount;
-    // balancesMap[sender] := record 
-    //     balance = balanceFromInfo.balance;
-    //     allowed = allowed;
-    // end;
-    // s.balances := balancesMap;
+  block { 
+
+    const balancesMap : balances = s.balances;
+    const balanceFromInfo : balance = case balancesMap[sender] of
+    | None -> record balance = 0mtz; allowed = ((map end) : map(address, tez)); end
+    | Some(b) -> get_force(sender, balancesMap)
+    end;
+    const amount: tez = balanceFromInfo.balance;
+    if action.amount < amount then fail("The amount isn't awailable")
+    else skip;
+    const allowed:  map(address, tez) = balanceFromInfo.allowed;
+    allowed[action.addrTo] := action.amount;
+    balancesMap[sender] := record 
+        balance = balanceFromInfo.balance;
+        allowed = allowed;
+    end;
+    s.balances := balancesMap;
    } with ((nil: list(operation)) , s)
 
 

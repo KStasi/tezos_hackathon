@@ -45,7 +45,6 @@ function buyToken(const action : actionBuy ; const s : storageType) : (list(oper
     if tokenAmount  >= availableTokens then fail("Not enough tez");
     else skip;
     const params: actionTransfer = record addrTo=sender; amount=tokenAmount*1mtz; end;
-
     s.totalTezos := totalTezos;
     s.totalTokens := abs(totalTokens);
     const contract : contract(actionTransfer) = get_contract(s.token);

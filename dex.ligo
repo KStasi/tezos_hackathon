@@ -63,7 +63,7 @@ function buyTez(const action : actionBuyTez ; const s : storageTypeDex) : (list(
     const availableTez: nat = s.totalTezos;
     const tezAmount: nat = action.amount * s.totalTokens / ( s.totalTezos + action.amount);
     const totalTezos : int = s.totalTezos - tezAmount;
-    const totalTokens : nat = s.totalTezos + tezAmount;
+    const totalTokens : nat = s.totalTokens + tezAmount;
     if tezAmount  >= availableTez then fail("Not enough tez");
     else skip;
     s.totalTezos := abs(totalTezos);
@@ -80,7 +80,7 @@ function buyToken(const action : actionBuyTez ; const s : storageTypeDex) : (lis
     const availableTokens: nat = s.totalTokens;
     const tokenAmount: nat = action.amount * s.totalTezos / ( s.totalTokens + action.amount);
     const totalTezos : nat = s.totalTezos + tokenAmount;
-    const totalTokens : int = s.totalTezos - tokenAmount;
+    const totalTokens : int = s.totalTokens - tokenAmount;
     if tokenAmount  >= availableTokens then fail("Not enough tez");
     else skip;
     const params: action = Transfer(record addrTo=sender; amount=tokenAmount*1mtz; end);

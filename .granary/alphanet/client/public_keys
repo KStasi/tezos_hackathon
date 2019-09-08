@@ -1,0 +1,5 @@
+[ { "name": "alice",
+    "value":
+      { "locator":
+          "unencrypted:edpkuBUQYin5EDmJFDCJAgNUWYqJScjGm4MmWaTgYC7asXq2GVwbEp",
+        "key": "edpkuBUQYin5EDmJFDCJAgNUWYqJScjGm4MmWaTgYC7asXq2GVwbEp" } } ]

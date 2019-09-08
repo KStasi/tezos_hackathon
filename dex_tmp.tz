@@ -286,7 +286,7 @@
                                                                             SWAP } } ;
                                                                     SWAP } } ;
                                                             SWAP } ;
-                                                          NIL operation } ;
+                                                          { DIP { DUP } ; SWAP } } ;
                                                         PAIR } ;
                                                       {} ;
                                                       DIP { { DIP { DIP { DIP { DIP { DIP { DIP { DIP { DIP { DIP { DIP { DIP { DIP { DIP { {} } } } } } } } } } } } } } ;

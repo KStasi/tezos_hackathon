@@ -1,0 +1,11 @@
+ligo compile-contract token.ligo main > token_tmp.tz 
+ligo compile-contract dex.ligo main > dex_tmp.tz 
+tr -d '\r' < token_tmp.tz > token.tz
+tr -d '\r' < dex_tmp.tz > dex.tz
+granary client - originate contract token42 for jhon transferring 0 from jhon running $PWD/token.tz --init '" (Pair (Pair (Pair {} 0) (Pair \"ShitCoin\" \"tz1RrMsXLHktL46tmazzcsTURQN4XQQDkh2u\")) (Pair 10 1000000000))"' --burn-cap 20
+granary client - originate contract dex42 for jhon transferring 5 from jhon running $PWD/dex.tz --init '" (Pair (Pair \"KT1Gexxy2nifK5BG6bijjRFhZLUEzjMq5udN\" 5000000) 10000)"' --burn-cap 8.200 
+granary client - transfer 0.1 from jhon to token42 --arg '"(Left (Left (Right 10000)))"' --burn-cap 0.064
+granary client - transfer 0 from jhon to token42 --arg '"(Left (Right (Right (Pair \"KT1R3P62U47Wcb1tTpjPi7qpgcKnoem13W3w\" 100000))))"' --burn-cap 0.064
+granary client - transfer 0.000001 from jhon to dex42 --arg '"(Right 1)"'  --burn-cap 0.064
+granary client - transfer 0 from jhon to token42 --arg '"(Left (Right (Left (Pair 1000 \"KT1R3P62U47Wcb1tTpjPi7qpgcKnoem13W3w\"))))"' --burn-cap 0.064
+

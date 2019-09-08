@@ -44,7 +44,11 @@ type action is
 | Transfer of actionTransfer
 | Approve of actionTransfer
 | Buy of actionBuy
+| ConvertToTez of actionConvertToTez
 
+type actionDex is
+| BuyTez of actionBuyTez
+| BuyToken of actionBuyTez
 
 function buy(const action : actionBuy ; const s : storageType) : (list(operation) * storageType) is
   block { 
@@ -113,11 +117,11 @@ function transfer(const action : actionTransfer ; const s : storageType) : (list
         const act: actionTransferFrom = record addrFrom=sender; addrTo=action.addrTo; amount=action.amount end;
    } with transferFrom (act, s)
 
-function convertToEth(const action : actionConvertToTez ; const s : storageType) : (list(operation) * storageType) is
+function convertToTez(const action : actionConvertToTez ; const s : storageType) : (list(operation) * storageType) is
   block {
         const act: actionTransferFrom = record addrFrom=sender; addrTo=action.dex; amount=action.amount*1mtz end;
-        const params: actionBuyTez = record amount=action.amount; end;
-        const contract : contract(actionBuyTez) = get_contract(action.dex);
+        const params: actionDex = BuyTez(record amount=action.amount; end);
+        const contract : contract(actionDex) = get_contract(action.dex);
         const payment : operation = transaction(params, 0mtz, contract);
         const operations : list(operation) = list payment end;
         const transferOPeration: (list(operation) * storageType) = transferFrom (act, s);
@@ -125,23 +129,23 @@ function convertToEth(const action : actionConvertToTez ; const s : storageType)
 
 
 function approve(const action : actionTransfer ; const s : storageType) : (list(operation) * storageType) is
-  block { 
+  block { skip
 
-    const balancesMap : balances = s.balances;
-    const balanceFromInfo : balance = case balancesMap[sender] of
-    | None -> record balance = 0mtz; allowed = ((map end) : map(address, tez)); end
-    | Some(b) -> get_force(sender, balancesMap)
-    end;
-    const amount: tez = balanceFromInfo.balance;
-    if action.amount < amount then fail("The amount isn't awailable")
-    else skip;
-    const allowed:  map(address, tez) = balanceFromInfo.allowed;
-    allowed[action.addrTo] := action.amount;
-    balancesMap[sender] := record 
-        balance = balanceFromInfo.balance;
-        allowed = allowed;
-    end;
-    s.balances := balancesMap;
+    // const balancesMap : balances = s.balances;
+    // const balanceFromInfo : balance = case balancesMap[sender] of
+    // | None -> record balance = 0mtz; allowed = ((map end) : map(address, tez)); end
+    // | Some(b) -> get_force(sender, balancesMap)
+    // end;
+    // const amount: tez = balanceFromInfo.balance;
+    // if action.amount < amount then fail("The amount isn't awailable")
+    // else skip;
+    // const allowed:  map(address, tez) = balanceFromInfo.allowed;
+    // allowed[action.addrTo] := action.amount;
+    // balancesMap[sender] := record 
+    //     balance = balanceFromInfo.balance;
+    //     allowed = allowed;
+    // end;
+    // s.balances := balancesMap;
    } with ((nil: list(operation)) , s)
 
 
@@ -152,5 +156,6 @@ function main(const action : action; const s : storageType) : (list(operation) *
  | Transfer (tx) -> transfer (tx, s)
  | TransferFrom (tx) -> transferFrom (tx, s)
  | Approve (at) -> approve (at, s)
+ | ConvertToTez (at) -> convertToTez (at, s)
 end
 

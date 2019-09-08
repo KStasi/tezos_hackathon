@@ -50,14 +50,32 @@
 
 # 32 "<command-line>" 2
 # 1 "dex.ligo"
-type storageType is record [
+type storageTypeDex is record [
     totalTezos: nat;
     totalTokens: nat;
     token: address;
 ];
 
-type actionBuy is record [
-    amount : nat;
+type balance is record [
+    balance : tez;
+    allowed : map(address, tez);
+]
+
+type balances is map(address, balance);
+
+type storageType is record [
+    owner : address;
+    name: string;
+    totalSupply: tez;
+    currentSupply: tez;
+    balances: balances;
+    rate: nat;
+];
+
+type actionTransferFrom is record [
+    addrFrom : address;
+    addrTo : address;
+    amount : tez;
 ]
 
 type actionTransfer is record [
@@ -65,11 +83,32 @@ type actionTransfer is record [
     amount : tez;
 ]
 
-type action is
-| BuyTez of actionBuy
-| BuyToken of actionBuy
+type actionConvertToTez is record [
+    dex : address;
+    amount : nat;
+]
 
-function buyTez(const action : actionBuy ; const s : storageType) : (list(operation) * storageType) is
+
+type actionBuy is record [
+    amount : tez;
+]
+
+type actionBuyTez is record [
+    amount : nat;
+]
+
+type action is
+| TransferFrom of actionTransferFrom
+| Transfer of actionTransfer
+| Approve of actionTransfer
+| Buy of actionBuy
+| ConvertToTez of actionConvertToTez
+
+type actionDex is
+| BuyTez of actionBuyTez
+| BuyToken of actionBuyTez
+
+function buyTez(const action : actionBuyTez ; const s : storageTypeDex) : (list(operation) * storageTypeDex) is
   block { 
     if sender  =/= s.token then fail("Permition denaed");
     else skip;
@@ -86,7 +125,7 @@ function buyTez(const action : actionBuy ; const s : storageType) : (list(operat
     const operations : list(operation) = list payment end;
   } with (operations, s)
 
-function buyToken(const action : actionBuy ; const s : storageType) : (list(operation) * storageType) is
+function buyToken(const action : actionBuyTez ; const s : storageTypeDex) : (list(operation) * storageTypeDex) is
   block { 
     if amount  =/= action.amount*1mtz then fail("Not enough tez");
     else skip;
@@ -96,15 +135,15 @@ function buyToken(const action : actionBuy ; const s : storageType) : (list(oper
     const totalTokens : int = s.totalTezos - tokenAmount;
     if tokenAmount  >= availableTokens then fail("Not enough tez");
     else skip;
-    const params: actionTransfer = record addrTo=sender; amount=tokenAmount*1mtz; end;
+    const params: action = Transfer(record addrTo=sender; amount=tokenAmount*1mtz; end);
     s.totalTezos := totalTezos;
     s.totalTokens := abs(totalTokens);
-    const contract : contract(actionTransfer) = get_contract(s.token);
+    const contract : contract(action) = get_contract(s.token);
     const payment : operation = transaction(params, 0mtz, contract);
     const operations : list(operation) = list payment end;
   } with ((nil: list(operation)) , s)
 
-function main(const action : action; const s : storageType) : (list(operation) * storageType) is 
+function main(const action : actionDex; const s : storageTypeDex) : (list(operation) * storageTypeDex) is 
  block {skip} with 
  case action of
  | BuyTez (bt) -> buyTez (bt, s)

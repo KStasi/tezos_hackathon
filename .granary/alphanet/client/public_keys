@@ -1,4 +1,9 @@
-[ { "name": "alice",
+[ { "name": "bob",
+    "value":
+      { "locator":
+          "unencrypted:edpkuajtwcKp9tjwzXHa9N3mpbgVzDT3uRVp1rEsNMc72ZM7RUw9Af",
+        "key": "edpkuajtwcKp9tjwzXHa9N3mpbgVzDT3uRVp1rEsNMc72ZM7RUw9Af" } },
+  { "name": "alice",
     "value":
       { "locator":
           "unencrypted:edpkuBUQYin5EDmJFDCJAgNUWYqJScjGm4MmWaTgYC7asXq2GVwbEp",

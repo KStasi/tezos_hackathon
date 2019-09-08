@@ -205,12 +205,15 @@
                                                        { COMPARE ; GE } } } ;
                                                    IF { { FAILWITH } } { { DROP ; PUSH unit Unit } } } }
                                                { PUSH unit Unit } } ;
-                                          { { { { { PUSH mutez 1 ;
-                                                    { DIP { { DIP { { DIP { { DIP { DUP } ; SWAP } } ; SWAP } } ; SWAP } } ;
-                                                      SWAP } } ;
-                                                  MUL } ;
-                                                { {} ; SENDER } } ;
-                                              PAIR } ;
+                                          { { { { { { { { { { { PUSH mutez 1 ;
+                                                                { DIP { { DIP { { DIP { { DIP { DUP } ; SWAP } } ; SWAP } } ; SWAP } } ;
+                                                                  SWAP } } ;
+                                                              MUL } ;
+                                                            { {} ; SENDER } } ;
+                                                          PAIR } } ;
+                                                      RIGHT (pair nat address) } } ;
+                                                  RIGHT (or (pair address mutez) mutez) } } ;
+                                              LEFT (pair (pair address address) mutez) } ;
                                             { { {} ;
                                                 { DIP { { DIP { { DIP { DUP } ; SWAP } } ; SWAP } } ; SWAP } ;
                                                 {} ;
@@ -266,7 +269,9 @@
                                                                 SWAP } } ;
                                                             CAR } } ;
                                                         CAR } } ;
-                                                    { CONTRACT (pair address mutez) ;
+                                                    { CONTRACT
+                                                        (or (or (or (pair address mutez) mutez) (or (pair nat address) (pair address mutez)))
+                                                            (pair (pair address address) mutez)) ;
                                                       IF_NONE
                                                         { { PUSH string "bad address for get_contract" ; FAILWITH } }
                                                         { {} } } } ;

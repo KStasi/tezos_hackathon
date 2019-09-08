@@ -1,1 +1,2 @@
-[ { "name": "alice", "value": "tz1gSkRdKZiEyDXWArRSBLjpUaFr5ReLMy1w" } ]
+[ { "name": "bob", "value": "tz1abiiJXDW9hdCAbpF79xM5EVK1diAgnXeH" },
+  { "name": "alice", "value": "tz1gSkRdKZiEyDXWArRSBLjpUaFr5ReLMy1w" } ]

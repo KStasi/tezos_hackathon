@@ -1,0 +1,24 @@
+{
+  "mnemonic": [
+    "garbage",
+    "utility",
+    "estate",
+    "lounge",
+    "lava",
+    "fantasy",
+    "wish",
+    "old",
+    "alter",
+    "clinic",
+    "because",
+    "vintage",
+    "donate",
+    "trumpet",
+    "lemon"
+  ],
+  "secret": "129f0ea640d93dfbe8c25e640f521441f6f848f1",
+  "amount": "43888838596",
+  "pkh": "tz1abiiJXDW9hdCAbpF79xM5EVK1diAgnXeH",
+  "password": "F7MTvJTNFW",
+  "email": "htrtjpnq.jgczvxww@tezos.example.org"
+}

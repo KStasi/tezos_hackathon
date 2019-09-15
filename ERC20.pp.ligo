@@ -1,4 +1,4 @@
-# 1 "token.ligo"
+# 1 "ERC20.ligo"
 # 1 "<built-in>"
 # 1 "<command-line>"
 # 31 "<command-line>"
@@ -49,7 +49,8 @@
 
 
 # 32 "<command-line>" 2
-# 1 "token.ligo"
+# 1 "ERC20.ligo"
+
 type balance is record [
     balance : tez;
     allowed : map(address, tez);
@@ -77,31 +78,27 @@ type actionTransfer is record [
     amount : tez;
 ]
 
-type actionConvertToTez is record [
-    dex : address;
-    amount : nat;
-]
-
-
 type actionBuy is record [
     amount : tez;
 ]
 
-
-type actionBuyTez is record [
-    amount : nat;
+type actionBalanceOf is record [
+    who : address;
 ]
 
-type actionDex is
-| BuyTez of actionBuyTez
-| BuyToken of actionBuyTez
+type actioaAllowance is record [
+    addrFrom : address;
+    addrTo : address;
+]
 
 type action is
 | TransferFrom of actionTransferFrom
 | Transfer of actionTransfer
 | Approve of actionTransfer
+| Allowance of actioaAllowance
 | Buy of actionBuy
-| ConvertToTez of actionConvertToTez
+| BalanceOf of actionBalanceOf
+
 
 
 function buy(const action : actionBuy ; const s : storageType) : (list(operation) * storageType) is
@@ -172,25 +169,25 @@ function transferFrom(const action : actionTransferFrom ; const s : storageType)
     s.balances := balancesMap;
    } with ((nil: list(operation)) , s)
 
+
 function transfer(const action : actionTransfer ; const s : storageType) : (list(operation) * storageType) is
   block {
         const act: actionTransferFrom = record addrFrom=sender; addrTo=action.addrTo; amount=action.amount end;
    } with transferFrom (act, s)
 
-function convertToTez(const action : actionConvertToTez ; const s : storageType) : (list(operation) * storageType) is
+function balanceOf(const action : actionBalanceOf ; const s : storageType) : (list(operation) * storageType) is
+  block { 
+      skip
+   } with ((nil: list(operation)) , s)
+
+function allowance(const action : actioaAllowance ; const s : storageType) : (list(operation) * storageType) is
   block {
-        const act: actionTransferFrom = record addrFrom=sender; addrTo=action.dex; amount=action.amount*1mtz end;
-        const params: actionDex = BuyTez(record amount=action.amount; end);
-        const contract : contract(actionDex) = get_contract(action.dex);
-        const payment : operation = transaction(params, 0mtz, contract);
-        const operations : list(operation) = list payment end;
-        const transferOPeration: (list(operation) * storageType) = transferFrom (act, s);
-  } with (operations, transferOPeration.1)
+        skip
+   } with ((nil: list(operation)) , s)
 
 
 function approve(const action : actionTransfer ; const s : storageType) : (list(operation) * storageType) is
-  block { skip
-
+  block {
     const balancesMap : balances = s.balances;
     const balanceFromInfo : balance = case balancesMap[sender] of
     | None -> record balance = 0mtz; allowed = ((map end) : map(address, tez)); end
@@ -216,6 +213,8 @@ function main(const action : action; const s : storageType) : (list(operation) *
  | Transfer (tx) -> transfer (tx, s)
  | TransferFrom (tx) -> transferFrom (tx, s)
  | Approve (at) -> approve (at, s)
- | ConvertToTez (at) -> convertToTez (at, s)
+ | Allowance (at) -> allowance (at, s)
+ | BalanceOf (at) -> balanceOf (at, s)
+
 end
 

@@ -55,7 +55,7 @@ type action is
 function buy(const action : actionBuy ; const s : storageType) : (list(operation) * storageType) is
   block { 
     const availableSupply: tez = s.totalSupply - s.currentSupply;
-    if amount  > availableSupply then fail("Total supply overruned");
+    if amount  > availableSupply then failwith("Total supply overruned");
     else skip;
     const balancesMap : balances = s.balances;
     const tokensAmount: tez = amount * s.rate;
@@ -83,7 +83,7 @@ function transferFrom(const action : actionTransferFrom ; const s : storageType)
     end;
 
     const awailableAmount: tez = balanceFromInfo.balance;
-    if action.amount > awailableAmount then fail("The amount isn't awailable")
+    if action.amount > awailableAmount then failwith("The amount isn't awailable")
     else skip;
 
     const allowedAmont: tez = case balanceFromInfo.allowed[sender] of
@@ -91,7 +91,7 @@ function transferFrom(const action : actionTransferFrom ; const s : storageType)
     | Some(b) -> get_force(sender, balanceFromInfo.allowed)
     end;
 
-    if action.amount > allowedAmont then fail("The amount isn't awailable")
+    if action.amount > allowedAmont then failwith("The amount isn't awailable")
     else skip;
 
 
@@ -137,15 +137,14 @@ function convertToTez(const action : actionConvertToTez ; const s : storageType)
 
 
 function approve(const action : actionTransfer ; const s : storageType) : (list(operation) * storageType) is
-  block { skip
-
+  block {
     const balancesMap : balances = s.balances;
     const balanceFromInfo : balance = case balancesMap[sender] of
     | None -> record balance = 0mtz; allowed = ((map end) : map(address, tez)); end
     | Some(b) -> get_force(sender, balancesMap)
     end;
     const amount: tez = balanceFromInfo.balance;
-    if action.amount < amount then fail("The amount isn't awailable")
+    if action.amount < amount then failwith("The amount isn't awailable")
     else skip;
     const allowed:  map(address, tez) = balanceFromInfo.allowed;
     allowed[action.addrTo] := action.amount;

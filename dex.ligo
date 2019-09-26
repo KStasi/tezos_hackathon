@@ -58,13 +58,13 @@ type actionDex is
 
 function buyTez(const action : actionBuyTez ; const s : storageTypeDex) : (list(operation) * storageTypeDex) is
   block { 
-    if sender  =/= s.token then fail("Permition denaed");
+    if sender  =/= s.token then failwith("Permition denaed");
     else skip;
     const availableTez: nat = s.totalTezos;
     const tezAmount: nat = action.amount * s.totalTokens / ( s.totalTezos + action.amount);
     const totalTezos : int = s.totalTezos - tezAmount;
     const totalTokens : nat = s.totalTokens + tezAmount;
-    if tezAmount  >= availableTez then fail("Not enough tez");
+    if tezAmount  >= availableTez then failwith("Not enough tez");
     else skip;
     s.totalTezos := abs(totalTezos);
     s.totalTokens := totalTokens;
@@ -75,13 +75,13 @@ function buyTez(const action : actionBuyTez ; const s : storageTypeDex) : (list(
 
 function buyToken(const action : actionBuyTez ; const s : storageTypeDex) : (list(operation) * storageTypeDex) is
   block { 
-    if amount  =/= action.amount*1mtz then fail("Not enough tez");
+    if amount  =/= action.amount*1mtz then failwith("Not enough tez");
     else skip;
     const availableTokens: nat = s.totalTokens;
     const tokenAmount: nat = action.amount * s.totalTezos / ( s.totalTokens + action.amount);
     const totalTezos : nat = s.totalTezos + tokenAmount;
     const totalTokens : int = s.totalTokens - tokenAmount;
-    if tokenAmount  >= availableTokens then fail("Not enough tez");
+    if tokenAmount  >= availableTokens then failwith("Not enough tez");
     else skip;
     const params: action = Transfer(record addrTo=sender; amount=tokenAmount*1mtz; end);
     s.totalTezos := totalTezos;
